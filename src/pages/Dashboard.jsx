@@ -1,58 +1,61 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+const shortcuts = [
+  { label: '+ Novo Produto', to: '/produtos' },
+  { label: '+ Novo Pedido', to: '/pedidos' },
+  { label: 'Ver Pedidos', to: '/litasdepedidos' },
+  { label: 'Ver Estoque', to: '/estoque' }
+]
 
 export default function Dashboard() {
-
   return (
-    <div className="w-full px-6 py-8 space-y-8 overflow-y-scroll">
+    <div className="w-full px-6 py-8 space-y-8 overflow-y-scroll bg-background text-textPrimary">
 
       {/* Atalhos rápidos */}
       <div>
-        <h2 className="text-lg font-semibold mb-4 text-[#4FD1C5]">Atalhos Rápidos</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Atalhos Rápidos</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <button className="bg-[#4FD1C5] text-[#1E1E2F] font-medium py-2 rounded-md hover:opacity-90 transition">
-            <a href='#'>+ Novo Produto</a>
-          </button>
-          <button className="bg-[#4FD1C5] text-[#1E1E2F] font-medium py-2 rounded-md hover:opacity-90 transition">
-            <a href='#'>+ Novo Pedido</a>
-          </button>
-          <button className="bg-[#4FD1C5] text-[#1E1E2F] font-medium py-2 rounded-md hover:opacity-90 transition">
-            Ver Pedidos
-          </button>
-          <button className="bg-[#4FD1C5] text-[#1E1E2F] font-medium py-2 rounded-md hover:opacity-90 transition">
-            <a href='#'>Ver Estoque</a>
-          </button>
+          {shortcuts.map((item, i) => (
+            <button
+              key={i}
+              className="bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transition"
+            >
+              <Link to={item.to}>{item.label}</Link>
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Cards principais */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#1E1E2F] p-5 rounded-lg border border-[#2D2D44]">
-          <p className="text-sm text-[#A0A0B0]">Produtos no Estoque</p>
-          <h3 className="text-2xl font-bold text-[#4FD1C5]">120</h3>
-        </div>
-        <div className="bg-[#1E1E2F] p-5 rounded-lg border border-[#2D2D44]">
-          <p className="text-sm text-[#A0A0B0]">Pedidos Realizados</p>
-          <h3 className="text-2xl font-bold text-[#4FD1C5]">34</h3>
-        </div>
-        <div className="bg-[#1E1E2F] p-5 rounded-lg border border-[#2D2D44]">
-          <p className="text-sm text-[#A0A0B0]">Pedidos Pendentes</p>
-          <h3 className="text-2xl font-bold text-[#4FD1C5]">5</h3>
-        </div>
-        <div className="bg-[#1E1E2F] p-5 rounded-lg border border-[#2D2D44]">
-          <p className="text-sm text-[#A0A0B0]">Clientes Atendidos</p>
-          <h3 className="text-2xl font-bold text-[#4FD1C5]">21</h3>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        {[
+          { label: "Produtos no Estoque", value: "120" },
+          { label: "Pedidos Realizados", value: "34" },
+          { label: "Pedidos Pendentes", value: "5" },
+        ].map((card, i) => (
+          <div
+            key={i}
+            className="bg-[#2B2B3B] p-5 rounded-lg border border-[#3A3A50] col-span-2"
+          >
+            <p className="text-sm text-[#7AA2F7]">{card.label}</p>
+            <h3 className="text-2xl font-bold text-[#E0E0E0]">{card.value}</h3>
+          </div>
+        ))}
       </div>
 
       {/* Últimos pedidos */}
       <div>
-        <h2 className="text-lg font-semibold mb-4 text-[#4FD1C5]">Últimos Pedidos</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Últimos Pedidos</h2>
         <div className="space-y-2">
           {[1, 2, 3].map((_, i) => (
-            <div key={i} className="bg-[#1E1E2F] p-4 rounded-md border border-[#2D2D44] text-sm text-[#C0C0C0]">
-              <p><span className="text-[#8888AA]">Cliente:</span> João da Silva</p>
-              <p><span className="text-[#8888AA]">Produto:</span> Teclado Gamer</p>
-              <p><span className="text-[#8888AA]">Status:</span> Em andamento</p>
+            <div
+              key={i}
+              className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
+            >
+              <p><span className="text-[#9090A0]">Cliente:</span> João da Silva</p>
+              <p><span className="text-[#9090A0]">Produto:</span> Teclado Gamer</p>
+              <p><span className="text-[#9090A0]">Status:</span> Em andamento</p>
             </div>
           ))}
         </div>
@@ -60,16 +63,20 @@ export default function Dashboard() {
 
       {/* Estoque crítico */}
       <div>
-        <h2 className="text-lg font-semibold mb-4 text-[#4FD1C5]">Estoque Crítico</h2>
+        <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Estoque Crítico</h2>
         <div className="space-y-2">
           {[1, 2].map((_, i) => (
-            <div key={i} className="bg-[#1E1E2F] p-4 rounded-md border border-[#2D2D44] text-sm text-[#C0C0C0]">
-              <p><span className="text-[#8888AA]">Produto:</span> Mouse Óptico</p>
-              <p><span className="text-[#8888AA]">Quantidade:</span> 2 unidades</p>
+            <div
+              key={i}
+              className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
+            >
+              <p><span className="text-[#9090A0]">Produto:</span> Mouse Óptico</p>
+              <p><span className="text-[#9090A0]">Quantidade:</span> 2 unidades</p>
             </div>
           ))}
         </div>
       </div>
+
     </div>
   );
-};
+}

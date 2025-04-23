@@ -1,7 +1,7 @@
-export default function PedidosForm () {
+export default function OrdersForm () {
    return (
       <div className="w-full max-w-xl mx-auto bg-[#1E1E2F] p-8 rounded-xl flex flex-col justify-center">
-        <h2 className="text-xl font-semibold mb-6 text-[#4FD1C5]">Novo Pedido</h2>
+        <h2 className="text-xl font-semibold mb-6 text-[#7AA2F7]">Novo Pedido</h2>
         <form className="space-y-4">
           <div>
             <label className="block text-sm mb-1 text-[#A0A0B0]">Nome do Produto</label>
@@ -50,7 +50,7 @@ export default function PedidosForm () {
   
           <button
             type="submit"
-            className="w-full bg-[#4FD1C5] text-[#1E1E2F] font-medium py-2 rounded-md hover:opacity-90 transition"
+            className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transitiom hover:cursor-pointer"
           >
             Registrar Pedido
           </button>

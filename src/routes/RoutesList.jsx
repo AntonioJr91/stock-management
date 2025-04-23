@@ -1,16 +1,16 @@
 import { useRoutes } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
-import ProdutosForm from "../pages/ProdutosForm";
-import PedidosForm from "../pages/PedidosForm";
-import EstoqueItem from "../pages/EstoqueItem";
+import ProductsForm from "../pages/ProductsForm";
+import OrdersForm from "../pages/OrdersForm";
+import InventoryItem from "../pages/InventoryItem";
 
 export const RoutesList = () => {
    return(
       useRoutes([
          {path: '/', element: <Dashboard/>},
-         {path: '/produtos', element: <ProdutosForm/>},
-         {path: '/pedidos', element: <PedidosForm/>},
-         {path: '/estoque', element: <EstoqueItem/>}
+         {path: '/produtos', element: <ProductsForm/>},
+         {path: '/pedidos', element: <OrdersForm/>},
+         {path: '/estoque', element: <InventoryItem/>}
       ])
    );
 }
