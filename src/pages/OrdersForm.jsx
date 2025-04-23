@@ -4,7 +4,7 @@ import { ProductsContext } from "../context/ProductsContext";
 
 export default function OrdersForm() {
 
-  const { productName, setProductName, amount, setAmount, clientName, setClientName, handleAddNewOrder, inputProductNameRef } = useContext(OrdersContext);
+  const { productName, setProductName, amount, setAmount, clientName, setClientName, handleAddNewOrder } = useContext(OrdersContext);
   const { products } = useContext(ProductsContext);
 
   return (

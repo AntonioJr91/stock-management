@@ -51,17 +51,23 @@ export default function Dashboard() {
       </div>
 
       {/* Últimos pedidos */}
+
       <div>
         <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Últimos Pedidos</h2>
+
+        {!orderList.length && <div className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]">
+          <p className="text-[#9090A0]">Nenhum pedido.</p>
+        </div>}
+
         <div className="space-y-2">
           {orderList.slice(-3).map((order, i) => (
             <div
               key={i}
               className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
             >
-              <p><span className="text-[#9090A0]">Cliente:</span>{order.clientName}</p>
-              <p><span className="text-[#9090A0]">Produto:</span>{order.productName}</p>
-              <p><span className="text-[#9090A0]">Status:</span>{order.status ? 'Concluído' : 'Pendente'}</p>
+              <p><span className="text-[#9090A0]">Cliente: </span>{order.clientName}</p>
+              <p><span className="text-[#9090A0]">Produto: </span>{order.productName}</p>
+              <p className={`${order.status ? 'text-green-500' : 'text-red-500'}`}><span className="text-[#9090A0]">Status: </span>{order.status ? 'Concluído' : 'Pendente'}</p>
             </div>
           ))}
         </div>
@@ -80,7 +86,7 @@ export default function Dashboard() {
                   className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
                 >
                   <p><span className="text-[#9090A0]">Produto:</span> {product.name}</p>
-                  <p><span className="text-[#9090A0]">Quantidade:</span> {product.amount}</p>
+                  <p className="text-red-500"><span className="text-[#9090A0]">Quantidade:</span> {product.amount}</p>
                 </div>
               ))
           ) : (

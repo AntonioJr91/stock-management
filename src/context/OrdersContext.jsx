@@ -4,7 +4,7 @@ import { ProductsContext } from "./ProductsContext";
 export const OrdersContext = createContext();
 
 export default function OrdersProvider({ children }) {
-   const [orderList, setOrderList] = useState([]);
+   const [orderList, setOrderList] = useState([{id: 1, productName: "Feijao", amount:2, value: 12.50, clientName:"Jão", status:false}]);
    const [productName, setProductName] = useState('');
    const [amount, setAmount] = useState('');
    const [clientName, setClientName] = useState('');
@@ -19,12 +19,13 @@ export default function OrdersProvider({ children }) {
 
    const handleAddNewOrder = (productName, amount, clientName) => {
       const product = products.find(product => product.name === productName);
-
+      console.log(product)
       if (!product) return;
 
       const newOrder = {
          id: product.id,
          productName,
+         productValue: product.value,
          amount,
          clientName,
          status: false,
@@ -55,9 +56,13 @@ export default function OrdersProvider({ children }) {
    }
 
    const handlePendingOrders = () => {
-      const item = orderList.filter(product => product.status === false)
+      const item = orderList.filter(product => product.status === false);
       setPendingOrders([...pendingOrders, item]);
    };
+
+   const handleConfirmDeliveryButton = (id) => {
+      console.log(id)
+   }
 
    return (
       <OrdersContext.Provider value={
@@ -71,7 +76,8 @@ export default function OrdersProvider({ children }) {
             setProductName,
             setAmount,
             setClientName,
-            handleAddNewOrder
+            handleAddNewOrder,
+            handleConfirmDeliveryButton
          }
       }>
          {children}
