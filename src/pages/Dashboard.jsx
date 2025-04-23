@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { OrdersContext } from "../context/OrdersContext";
+import { ProductsContext } from "../context/ProductsContext";
 
 const shortcuts = [
-  { label: '+ Novo Produto', to: '/produtos' },
-  { label: '+ Novo Pedido', to: '/pedidos' },
-  { label: 'Ver Pedidos', to: '/litasdepedidos' },
-  { label: 'Ver Estoque', to: '/estoque' }
+  { label: '+ Novo Produto', to: '/products' },
+  { label: '+ Novo Pedido', to: '/orders' },
+  { label: 'Ver Pedidos', to: '/orderlist' },
+  { label: 'Ver Estoque', to: '/stock' }
 ]
 
 export default function Dashboard() {
+
+  const { orderList, pendingOrders } = useContext(OrdersContext);
+  const { products } = useContext(ProductsContext);
+
   return (
     <div className="w-full px-6 py-8 space-y-8 overflow-y-scroll bg-background text-textPrimary">
 
@@ -30,9 +36,9 @@ export default function Dashboard() {
       {/* Cards principais */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         {[
-          { label: "Produtos no Estoque", value: "120" },
-          { label: "Pedidos Realizados", value: "34" },
-          { label: "Pedidos Pendentes", value: "5" },
+          { label: "Produtos no Estoque", value: products.length },
+          { label: "Pedidos Realizados", value: orderList.length },
+          { label: "Pedidos Pendentes", value: pendingOrders.length },
         ].map((card, i) => (
           <div
             key={i}
@@ -48,14 +54,14 @@ export default function Dashboard() {
       <div>
         <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Últimos Pedidos</h2>
         <div className="space-y-2">
-          {[1, 2, 3].map((_, i) => (
+          {orderList.slice(-3).map((order, i) => (
             <div
               key={i}
               className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
             >
-              <p><span className="text-[#9090A0]">Cliente:</span> João da Silva</p>
-              <p><span className="text-[#9090A0]">Produto:</span> Teclado Gamer</p>
-              <p><span className="text-[#9090A0]">Status:</span> Em andamento</p>
+              <p><span className="text-[#9090A0]">Cliente:</span>{order.clientName}</p>
+              <p><span className="text-[#9090A0]">Produto:</span>{order.productName}</p>
+              <p><span className="text-[#9090A0]">Status:</span>{order.status ? 'Concluído' : 'Pendente'}</p>
             </div>
           ))}
         </div>
@@ -65,15 +71,23 @@ export default function Dashboard() {
       <div>
         <h2 className="text-lg font-semibold mb-4 text-[#7AA2F7]">Estoque Crítico</h2>
         <div className="space-y-2">
-          {[1, 2].map((_, i) => (
-            <div
-              key={i}
-              className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
-            >
-              <p><span className="text-[#9090A0]">Produto:</span> Mouse Óptico</p>
-              <p><span className="text-[#9090A0]">Quantidade:</span> 2 unidades</p>
+          {products.filter(product => product.amount < 10).length > 0 ? (
+            products
+              .filter(product => product.amount < 10)
+              .map((product, i) => (
+                <div
+                  key={i}
+                  className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]"
+                >
+                  <p><span className="text-[#9090A0]">Produto:</span> {product.name}</p>
+                  <p><span className="text-[#9090A0]">Quantidade:</span> {product.amount}</p>
+                </div>
+              ))
+          ) : (
+            <div className="bg-[#2B2B3B] p-4 rounded-md border border-[#3A3A50] text-sm text-[#C0C0D0]">
+              <p className="text-[#9090A0]">Todos os estoques estão abastecidos.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 

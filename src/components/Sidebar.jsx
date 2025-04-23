@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 
 const links = [
   { to: "/", label: "Dashboard" },
-  { to: "/produtos", label: "Produtos" },
-  { to: "/pedidos", label: "Pedidos" },
-  { to: "/estoque", label: "Estoque" },
+  { to: "/products", label: "Produtos" },
+  { to: "/orders", label: "Pedidos" },
+  { to: "/stock", label: "Estoque" },
 ]
 
 export default function Sidebar() {

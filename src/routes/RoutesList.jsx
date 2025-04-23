@@ -3,14 +3,16 @@ import Dashboard from "../pages/Dashboard";
 import ProductsForm from "../pages/ProductsForm";
 import OrdersForm from "../pages/OrdersForm";
 import InventoryItem from "../pages/InventoryItem";
+import OrderList from "../pages/OrdersList";
 
 export const RoutesList = () => {
    return(
       useRoutes([
          {path: '/', element: <Dashboard/>},
-         {path: '/produtos', element: <ProductsForm/>},
-         {path: '/pedidos', element: <OrdersForm/>},
-         {path: '/estoque', element: <InventoryItem/>}
+         {path: '/products', element: <ProductsForm/>},
+         {path: '/orders', element: <OrdersForm/>},
+         {path: '/orderlist', element: <OrderList/>},
+         {path: '/stock', element: <InventoryItem/>},
       ])
    );
 }

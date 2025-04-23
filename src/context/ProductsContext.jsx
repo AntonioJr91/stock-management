@@ -11,13 +11,9 @@ export default function ProductsProvider({ children }) {
 
    const inputProductNameRef = useRef();
 
-   const handleAddNewProductButton = async (name, value, amount) => {
-
-      const product =  {name, amount, value}
-      console.log(product)
-
-      setProducts([...products, product])
-
+   const handleAddNewProductButton = (name, value, amount) => {
+      const product =  {id:Date.now() ,name, amount, value};
+      setProducts([...products, product]);
       setName('');
       setValue('')
       setAmount('')
@@ -35,6 +31,7 @@ export default function ProductsProvider({ children }) {
             setName,
             setValue,
             setAmount,
+            setProducts,
             handleAddNewProductButton,
          }
       }>
