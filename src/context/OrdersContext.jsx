@@ -4,11 +4,12 @@ import { ProductsContext } from "./ProductsContext";
 export const OrdersContext = createContext();
 
 export default function OrdersProvider({ children }) {
-   const [orderList, setOrderList] = useState([{id: 1, productName: "Feijao", amount:2, value: 12.50, clientName:"Jão", status:false}]);
    const [productName, setProductName] = useState('');
    const [amount, setAmount] = useState('');
    const [clientName, setClientName] = useState('');
-   const [pendingOrders, setPendingOrders] = useState([])
+   const [pendingOrders, setPendingOrders] = useState([]);
+   const [orderList, setOrderList] = useState([{ id: 1, productName: "Feijao", amount: 2, productValue: 12.50, clientName: "Jão", status: false }]);
+   const [validationErros, setValidationErros] = useState([]);
 
    const inputProductNameRef = useRef();
 
@@ -18,9 +19,23 @@ export default function OrdersProvider({ children }) {
    }, [products])
 
    const handleAddNewOrder = (productName, amount, clientName) => {
-      const product = products.find(product => product.name === productName);
-      console.log(product)
-      if (!product) return;
+
+      const product = products.find(item => item.name === productName);
+
+      const fieldsName = ['Nome', 'Quantidade', 'Cliente'];
+      const fields = [productName, amount, clientName];
+
+      const errors = fields.reduce((acc, field, index) => {
+         if (field.trim() === '') {
+            acc.push({ field: fieldsName[index], message: `${fieldsName[index]} está vazio.` });
+         }
+         return acc;
+      }, []);
+
+      if (errors.length > 0) {
+         setValidationErros(errors);
+         return;
+      }
 
       const newOrder = {
          id: product.id,
@@ -40,7 +55,6 @@ export default function OrdersProvider({ children }) {
       setProductName('');
       setAmount('');
       setClientName('');
-
       inputProductNameRef.current?.focus();
    }
 
@@ -57,7 +71,7 @@ export default function OrdersProvider({ children }) {
 
    const handlePendingOrders = () => {
       const item = orderList.filter(product => product.status === false);
-      setPendingOrders([...pendingOrders, item]);
+      setPendingOrders(item);
    };
 
    const handleConfirmDeliveryButton = (id) => {
@@ -73,11 +87,13 @@ export default function OrdersProvider({ children }) {
             clientName,
             inputProductNameRef,
             pendingOrders,
+            validationErros,
             setProductName,
             setAmount,
             setClientName,
             handleAddNewOrder,
-            handleConfirmDeliveryButton
+            handleConfirmDeliveryButton,
+            setValidationErros
          }
       }>
          {children}

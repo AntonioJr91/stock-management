@@ -20,7 +20,7 @@ export default function OrdersList() {
                 <span className="text-[#8888AA]">Quantidade do pedido: </span> {order.amount} unidade{order.amount > 1 ? 's' : ''}
               </p>
               <p>
-                <span className="text-[#8888AA]">Valot total: </span> R${(order.value * order.amount).toFixed(2)}
+                <span className="text-[#8888AA]">Valot total: </span> R${(order.productValue * order.amount).toFixed(2)}
               </p>
               <p>
                 <span className={`${order.status ? "text-green-500" : "text-red-500"}`}>Status: {order.status ? 'Concluido' : 'Pendente'}</span>
