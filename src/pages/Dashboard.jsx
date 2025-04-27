@@ -34,11 +34,12 @@ export default function Dashboard() {
       </div>
 
       {/* Cards principais */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-4">
         {[
           { label: "Produtos no Estoque", value: products.length },
           { label: "Pedidos Realizados", value: orderList.length },
-          { label: "Pedidos Pendentes", value: pendingOrders.length },
+          { label: "Pedidos Pendentes", value: orderList.filter(orderPeding => orderPeding.status === false).length },
+          { label: "Pedidos Concluídos", value: orderList.filter(orderPeding => orderPeding.status === true).length },
         ].map((card, i) => (
           <div
             key={i}

@@ -1,81 +1,97 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getFromStorage, removeFromStorage, saveToStorage } from "../service/localStorageService";
+import { inputValidation } from "../helpers/inputsValidation";
 import { ProductsContext } from "./ProductsContext";
 
 export const OrdersContext = createContext();
 
 export default function OrdersProvider({ children }) {
+
+   const STORE_PRODUCTS = 'produtos';
+   const STORE_ORDERS = 'pedidos';
+
    const [productName, setProductName] = useState('');
    const [amount, setAmount] = useState('');
    const [clientName, setClientName] = useState('');
-   const [pendingOrders, setPendingOrders] = useState([]);
-   const [orderList, setOrderList] = useState([{ id: 1, productName: "Feijao", amount: 2, productValue: 12.50, clientName: "Jão", status: false }]);
+
+   const [orderList, setOrderList] = useState(getFromStorage(STORE_ORDERS) || []);
+
    const [validationErros, setValidationErros] = useState([]);
 
-   const inputProductNameRef = useRef();
-
-   const { products, setProducts } = useContext(ProductsContext);
+   const { products, dispatch } = useContext(ProductsContext, getFromStorage(STORE_PRODUCTS) || []);
 
    useEffect(() => {
-   }, [products])
+      return () => {
+         setProductName('');
+         setAmount('');
+         setClientName('');
+      }
+   }, []);
 
    const handleAddNewOrder = (productName, amount, clientName) => {
 
-      const product = products.find(item => item.name === productName);
+      if (!inputValidation(setValidationErros, ['Nome', 'Quantidade', 'Cliente'], productName, amount, clientName)) return;
 
-      const fieldsName = ['Nome', 'Quantidade', 'Cliente'];
-      const fields = [productName, amount, clientName];
+      const product = products.find(product => product.name === productName);
 
-      const errors = fields.reduce((acc, field, index) => {
-         if (field.trim() === '') {
-            acc.push({ field: fieldsName[index], message: `${fieldsName[index]} está vazio.` });
-         }
-         return acc;
-      }, []);
-
-      if (errors.length > 0) {
-         setValidationErros(errors);
+      if (product.amount === 0) {
+         alert('Este produto está esgotado.');
+         clearInputs();
          return;
       }
 
       const newOrder = {
-         id: product.id,
-         productName,
+         id: Date.now(),
+         productName: productName,
          productValue: product.value,
-         amount,
-         clientName,
+         amount: amount,
+         clientName: clientName,
          status: false,
       }
 
       setOrderList([...orderList, newOrder]);
+      saveToStorage(STORE_ORDERS, [...orderList, newOrder])
 
-      updateAmountProduct(product.id, amount);
+      const orderUpdateAmountDecremented = updateAmountProduct(products, product.id, amount);
 
-      handlePendingOrders()
+      saveToStorage(STORE_PRODUCTS, [...orderUpdateAmountDecremented]);
+      dispatch({ type: 'load', payload: orderUpdateAmountDecremented });
 
+      clearInputs();
+   }
+
+   const updateAmountProduct = (products, id, amount) => {
+      const currentProduct = products.map(product => {
+         if (product.id === id) {
+            return { ...product, amount: Math.max(product.amount - Number(amount), 0) }
+         }
+         return product;
+      });
+      return currentProduct
+   }
+
+   const handleConfirmDeliveryButton = (id) => {
+      const updateOrderPending = orderList.map(order => {
+         if (order.id === id && order.status === false) {
+            return { ...order, status: true }
+         };
+         return order;
+      });
+      setOrderList(updateOrderPending);
+      saveToStorage(STORE_ORDERS, updateOrderPending);
+
+   }
+
+   const clearInputs = () => {
       setProductName('');
       setAmount('');
       setClientName('');
-      inputProductNameRef.current?.focus();
    }
 
-   const updateAmountProduct = (id, amount) => {
-      setProducts(prevProducts => {
-         const updated = prevProducts.map(product =>
-            product.id === id
-               ? { ...product, amount: Math.max(product.amount - Number(amount), 0) }
-               : product
-         );
-         return updated;
-      });
-   }
-
-   const handlePendingOrders = () => {
-      const item = orderList.filter(product => product.status === false);
-      setPendingOrders(item);
-   };
-
-   const handleConfirmDeliveryButton = (id) => {
-      console.log(id)
+   const handleClearAllCompletedOrders = () => {
+      const compeltedOrders = orderList.filter(order => order.status !== true);
+      saveToStorage(STORE_ORDERS, compeltedOrders);
+      setOrderList(compeltedOrders);
    }
 
    return (
@@ -85,15 +101,14 @@ export default function OrdersProvider({ children }) {
             productName,
             amount,
             clientName,
-            inputProductNameRef,
-            pendingOrders,
             validationErros,
             setProductName,
             setAmount,
             setClientName,
             handleAddNewOrder,
             handleConfirmDeliveryButton,
-            setValidationErros
+            setValidationErros,
+            handleClearAllCompletedOrders
          }
       }>
          {children}

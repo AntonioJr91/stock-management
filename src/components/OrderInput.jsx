@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { pressKeyDown } from "../helpers/pressKeyDown";
 
 export default function OrderInput({
    products,
@@ -22,6 +23,7 @@ export default function OrderInput({
    useEffect(() => clearError('Nome', productName), [productName]);
    useEffect(() => clearError('Quantidade', amount), [amount]);
    useEffect(() => clearError('Cliente', clientName), [clientName]);
+   useEffect(() => { return () => setValidationErros([]) }, []);
 
    return (
       <div className="w-full max-w-xl mx-auto bg-[#1E1E2F] p-8 rounded-xl flex flex-col justify-center">
@@ -66,10 +68,11 @@ export default function OrderInput({
                   id="cliente"
                   value={clientName}
                   onChange={e => setClientName(e.target.value)}
+                  onKeyDown={(e) => pressKeyDown(e.code, handleAddNewOrder, productName, amount, clientName)}
                   className="w-full bg-[#252537] border border-transparent focus:border-[#4FD1C5] text-[#E0E0E0] rounded-md px-4 py-2 transition"
                />
                {validationErros.find(el => el.field === 'Cliente') &&
-                  <span className="text-red-500 text-sm block mt-0.5">Cliente está vazio.</span>
+                  <span className="text-red-500 text-sm block mt-0.5">Nome do cliente está vazio.</span>
                }
             </div>
 

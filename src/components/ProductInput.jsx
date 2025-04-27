@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { pressKeyDown } from "../helpers/pressKeyDown";
 
 export default function ProductInput({
    name,
@@ -22,6 +23,7 @@ export default function ProductInput({
    useEffect(() => clearError('Nome', name), [name]);
    useEffect(() => clearError('Quantidade', amount), [amount]);
    useEffect(() => clearError('Valor', value), [value]);
+   useEffect(() => { return () => setValidationErros([]) }, []);
 
    return (
       <div className="w-full max-w-xl mx-auto bg-[#1E1E2F] p-8 rounded-xl flex flex-col justify-center">
@@ -66,6 +68,7 @@ export default function ProductInput({
                   value={amount}
                   className="w-full bg-[#252537] border border-transparent focus:border-[#4FD1C5] text-[#E0E0E0] rounded-md px-4 py-2 transition"
                   onChange={e => setAmount(e.target.value)}
+                  onKeyDown={(e) => pressKeyDown(e.code, handleAddNewProductButton, name, value, amount)}
                />
                {validationErros.find(el => el.field === 'Quantidade') &&
                   <span className="text-red-500 text-sm block mt-0.5">Quantidade está vazio.</span>
