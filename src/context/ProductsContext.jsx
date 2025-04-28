@@ -4,15 +4,9 @@ import ProductReducer from "../reducer/ProductReducer";
 import { inputValidation } from "../helpers/inputsValidation";
 import { validationProduct } from "../helpers/productValidation";
 import { getFromStorage, saveToStorage } from "../service/localStorageService";
+import { clearInputs } from "../helpers/clearInputs";
 
 export const ProductsContext = createContext();
-
-export const clearInputs = (setName, setValue, setAmount, inputProductNameRef) => {
-   setName('');
-   setValue('');
-   setAmount('');
-   inputProductNameRef.current?.focus();
-}
 
 export default function ProductsProvider({ children }) {
 
@@ -27,7 +21,7 @@ export default function ProductsProvider({ children }) {
    const [isOpen, setIsOpen] = useState(false);
    const [currentProductEditId, setCurrentProductEditId] = useState(null);
 
-   const inputProductNameRef = useRef(null);
+   const inputProductNameRef = useRef();
 
    useEffect(() => {
       saveToStorage(STORE_PRODUCTS, products);
@@ -35,22 +29,22 @@ export default function ProductsProvider({ children }) {
 
    const handleAddNewProductButton = (name, value, amount) => {
 
-      if (!validationProduct(products, name, setName, setValue, setAmount, inputProductNameRef)) return;
+      if (!validationProduct(products, name, setName, setValue, setAmount)) return;
 
       if (!inputValidation(setValidationErros, ['Nome', 'Valor', 'Quantidade'], name, value, amount)) return;
 
       const id = Date.now();
-      dispatch({ type: 'add', payload: { id: id, name: name, value: value, amount: amount } });
+      dispatch({ type: 'add', payload: { id: id, name, value, amount } });
 
       saveToStorage(STORE_PRODUCTS, [...products, { id, name, value, amount }]);
 
-      clearInputs(setName, setValue, setAmount, inputProductNameRef);
+      clearInputs(setName, setValue, setAmount);
    }
 
-   const handleDeleteProductButton = (id) => {
-      const product = products.find(product => product.id === id);
-      const confirm = window.confirm(`Deseja remover o produto = [ ${product.name} ] do estoque? `);
-      if (confirm) dispatch({ type: 'del', payload: id })
+   const handleDeleteProductButton = (id, name) => {
+      const confirm = window.confirm(`Deseja remover o produto = [ ${name} ] do estoque? `);
+      if (!confirm) return;
+      dispatch({ type: 'del', payload: id });
    }
 
    const handEditProductButton = (id) => {

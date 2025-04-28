@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ProductsContext } from "../context/ProductsContext";
 import EditProductModal from "../components/EditProductModal";
 
-export default function InventoryList() {
+export default function ProductList() {
 
   const { products,
     dispatch,
@@ -51,7 +51,7 @@ export default function InventoryList() {
               </button>
               <button
                 className="text-xs bg-[#3A3A50] text-red-400 px-2 py-1 rounded hover:bg-red-500 hover:text-white hover:cursor-pointer transition"
-                onClick={() => handleDeleteProductButton(product.id)}
+                onClick={() => handleDeleteProductButton(product.id, product.name)}
               >
                 Remover
               </button>

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { clearLocalStorage } from "../service/localStorageService";
 
 const links = [
   { to: "/", label: "Dashboard" },
@@ -9,6 +10,14 @@ const links = [
 ]
 
 export default function Sidebar() {
+
+  const handleClearAllData = () => {
+    const confirm = window.confirm('ATENÇÃO! Deseja limpar todos os dados da aplicação?');
+    if (!confirm) return;
+    clearLocalStorage();
+    window.location.reload();
+  }
+
   return (
     <aside className="w-1/4 min-w-1/4 bg-[#2D2D44] p-6 flex flex-col justify-between">
       <div>
@@ -29,7 +38,12 @@ export default function Sidebar() {
         </nav>
       </div>
       <div>
-        <button className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transition hover:cursor-pointer">Sair</button>
+        <button
+          className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-red-500 hover:text-black hover:font-bold active:translate-y-0.5 active:shadow-sm transition duration-150 ease-in-out hover:cursor-pointer"
+          onClick={handleClearAllData}
+        >
+          Limpar todos os dados
+        </button>
       </div>
     </aside>
   );

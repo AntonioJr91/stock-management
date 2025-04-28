@@ -28,17 +28,17 @@ export default function ProductReducer(products, action) {
          })
          return updateProducts
 
-      // case 'updateProductAmount':
-         // const updateProductAmount = products.map(product =>
-         //    product.id === action.payload.id
-         //       ? { ...product, amount: Math.max(product.amount - Number(action.payload.amount), 0) }
-         //       : product
-         // );
-
+      case 'updateAmountProduct':
+         const currentProduct = products.map(product => {
+            if (product.id === action.payload.id) {
+               return { ...product, amount: Math.max(product.amount - Number(action.payload.amount), 0) }
+            }
+            return product;
+         });
+         return currentProduct
 
       case 'del':
-         const updatedItens = products.filter(item => item.id !== action.payload);
-         return updatedItens;
+         return products.filter(product => product.id !== action.payload);
 
       default: return products;
    }

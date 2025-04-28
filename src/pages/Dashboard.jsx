@@ -12,7 +12,7 @@ const shortcuts = [
 
 export default function Dashboard() {
 
-  const { orderList, pendingOrders } = useContext(OrdersContext);
+  const { orderList } = useContext(OrdersContext);
   const { products } = useContext(ProductsContext);
 
   return (

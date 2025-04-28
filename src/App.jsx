@@ -14,11 +14,16 @@ const App = () => {
         <BrowserRouter>
           <Sidebar />
 
+          <ProductsProvider>
+            <OrdersProvider>
+
 
               <RoutesList>
                 <Dashboard />
               </RoutesList>
 
+            </OrdersProvider>
+          </ProductsProvider>
         </BrowserRouter>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { pressKeyDown } from "../helpers/pressKeyDown";
+import { clearInputs } from "../helpers/clearInputs";
 
 export default function OrderInput({
    products,
@@ -20,6 +21,7 @@ export default function OrderInput({
       }
    }
 
+   useEffect(() => () => clearInputs(setProductName, setAmount, setClientName), []);
    useEffect(() => clearError('Nome', productName), [productName]);
    useEffect(() => clearError('Quantidade', amount), [amount]);
    useEffect(() => clearError('Cliente', clientName), [clientName]);
@@ -78,11 +80,12 @@ export default function OrderInput({
 
             <button
                type="button"
+               className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] hover:cursor-pointer active:shadow-sm active:translate-y-0.5 transition duration-150 ease-in-out"
                onClick={() => handleAddNewOrder(productName, amount, clientName)}
-               className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transitiom hover:cursor-pointer"
             >
                Registrar Pedido
             </button>
+
          </form>
       </div>
    );

@@ -7,10 +7,10 @@ import OrdersProvider from './context/OrdersContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ProductsProvider>
-      <OrdersProvider>
+    {/* <ProductsProvider> */}
+      {/* <OrdersProvider> */}
       <App />
-      </OrdersProvider>
-    </ProductsProvider>
+      {/* </OrdersProvider> */}
+    {/* </ProductsProvider> */}
   </StrictMode>,
 )

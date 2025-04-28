@@ -1,7 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { getFromStorage, removeFromStorage, saveToStorage } from "../service/localStorageService";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { getFromStorage, saveToStorage } from "../service/localStorageService";
+import OrderReducer from "../reducer/OrderReducer";
 import { inputValidation } from "../helpers/inputsValidation";
 import { ProductsContext } from "./ProductsContext";
+import { clearInputs } from "../helpers/clearInputs";
 
 export const OrdersContext = createContext();
 
@@ -13,85 +15,56 @@ export default function OrdersProvider({ children }) {
    const [productName, setProductName] = useState('');
    const [amount, setAmount] = useState('');
    const [clientName, setClientName] = useState('');
-
-   const [orderList, setOrderList] = useState(getFromStorage(STORE_ORDERS) || []);
-
    const [validationErros, setValidationErros] = useState([]);
 
+   const [orderList, dispatchOrder] = useReducer(OrderReducer, getFromStorage(STORE_ORDERS) || []);
    const { products, dispatch } = useContext(ProductsContext, getFromStorage(STORE_PRODUCTS) || []);
 
    useEffect(() => {
-      return () => {
-         setProductName('');
-         setAmount('');
-         setClientName('');
-      }
-   }, []);
+      saveToStorage(STORE_ORDERS, orderList);
+   }, [orderList]);
 
    const handleAddNewOrder = (productName, amount, clientName) => {
 
-      if (!inputValidation(setValidationErros, ['Nome', 'Quantidade', 'Cliente'], productName, amount, clientName)) return;
+      try {
+         if (!inputValidation(setValidationErros, ['Nome', 'Quantidade', 'Cliente'], productName, amount, clientName)) return;
 
-      const product = products.find(product => product.name === productName);
+         const product = products.find(product => product.name === productName);
 
-      if (product.amount === 0) {
-         alert('Este produto está esgotado.');
-         clearInputs();
-         return;
+         if (product.amount === 0) {
+            alert('Este produto está esgotado.');
+            clearInputs();
+            return;
+         }
+
+         const newOrder = {
+            id: Date.now(),
+            productName,
+            productValue: product.value,
+            amount,
+            clientName,
+            status: false,
+         }
+
+         dispatchOrder({ type: 'add', payload: newOrder });
+         updateAmountProduct(products, product.id, amount);
+         clearInputs(setProductName, setAmount, setClientName);
+      } catch (error) {
+         console.log(error);
       }
-
-      const newOrder = {
-         id: Date.now(),
-         productName: productName,
-         productValue: product.value,
-         amount: amount,
-         clientName: clientName,
-         status: false,
-      }
-
-      setOrderList([...orderList, newOrder]);
-      saveToStorage(STORE_ORDERS, [...orderList, newOrder])
-
-      const orderUpdateAmountDecremented = updateAmountProduct(products, product.id, amount);
-
-      saveToStorage(STORE_PRODUCTS, [...orderUpdateAmountDecremented]);
-      dispatch({ type: 'load', payload: orderUpdateAmountDecremented });
-
-      clearInputs();
    }
 
    const updateAmountProduct = (products, id, amount) => {
-      const currentProduct = products.map(product => {
-         if (product.id === id) {
-            return { ...product, amount: Math.max(product.amount - Number(amount), 0) }
-         }
-         return product;
-      });
-      return currentProduct
+      //dispatch do produto
+      dispatch({ type: 'updateAmountProduct', payload: { products: products, id, amount } });
    }
 
    const handleConfirmDeliveryButton = (id) => {
-      const updateOrderPending = orderList.map(order => {
-         if (order.id === id && order.status === false) {
-            return { ...order, status: true }
-         };
-         return order;
-      });
-      setOrderList(updateOrderPending);
-      saveToStorage(STORE_ORDERS, updateOrderPending);
-
-   }
-
-   const clearInputs = () => {
-      setProductName('');
-      setAmount('');
-      setClientName('');
+      dispatchOrder({ type: 'updateOrderPending', payload: id });
    }
 
    const handleClearAllCompletedOrders = () => {
-      const compeltedOrders = orderList.filter(order => order.status !== true);
-      saveToStorage(STORE_ORDERS, compeltedOrders);
-      setOrderList(compeltedOrders);
+      dispatchOrder({ type: 'clearAllCompletedOrders' });
    }
 
    return (

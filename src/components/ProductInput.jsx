@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { pressKeyDown } from "../helpers/pressKeyDown";
+import { clearInputs } from "../helpers/clearInputs";
 
 export default function ProductInput({
    name,
@@ -14,11 +15,20 @@ export default function ProductInput({
    setValidationErros
 }) {
 
+ 
+
    const clearError = (fieldName, fieldValue) => {
       if (fieldValue.trim('') !== '') {
          setValidationErros(validationErros.filter(error => error.field !== fieldName))
       }
    }
+
+   useEffect(() => {
+      inputProductNameRef.current?.focus();
+      return () => {
+        clearInputs(setName, setValue, setAmount);
+      }
+    }, []);
 
    useEffect(() => clearError('Nome', name), [name]);
    useEffect(() => clearError('Quantidade', amount), [amount]);
@@ -76,7 +86,7 @@ export default function ProductInput({
             </div>
             <button
                type="button"
-               className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transitiom hover:cursor-pointer"
+              className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] hover:cursor-pointer active:shadow-sm active:translate-y-0.5 transition duration-150 ease-in-out"
                onClick={() => handleAddNewProductButton(name, value, amount)}
             >
                Cadastrar

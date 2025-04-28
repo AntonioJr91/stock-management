@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { pressKeyDown } from "../helpers/pressKeyDown";
 
 export default function EditProductModal({ closeModal, products, dispatch, productId }) {
 
@@ -76,6 +77,7 @@ export default function EditProductModal({ closeModal, products, dispatch, produ
               step="0.01"
               value={value}
               onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => pressKeyDown(e.code, handleSaveModalButton)}
               className="w-full px-3 py-2 rounded-md bg-[#1E1E2E] text-[#E0E0E0] border border-[#3A3A50] focus:outline-none focus:border-[#7AA2F7]"
             />
           </div>
