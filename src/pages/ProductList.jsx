@@ -18,7 +18,7 @@ export default function ProductList() {
   }
 
   return (
-
+  
     isOpen ? <EditProductModal
       closeModal={handleCloseModal}
       products={products}
@@ -26,6 +26,7 @@ export default function ProductList() {
       productId={currentProductEditId}
     /> :
       <div className="w-full bg-[#1E1E2F] rounded-lg p-6 shadow-sm mb-4 flex flex-col gap-1 overflow-y-scroll">
+        {products.length === 0 ? <span className="text-center text-xl text-[#7AA2F7]">Não há produtos em estoque!</span> : ''}
         {products.map(product => (
           <div
             key={product.id}
