@@ -16,7 +16,7 @@ export default function Dashboard() {
   const { products } = useContext(ProductsContext);
 
   return (
-    <div className="w-full px-6 py-8 space-y-8 overflow-y-scroll bg-background text-textPrimary">
+    <div className="w-full h-screen px-6 py-8 space-y-8 overflow-y-scroll bg-background text-textPrimary">
 
       {/* Atalhos rápidos */}
       <div>
@@ -26,7 +26,7 @@ export default function Dashboard() {
             <button
               key={i}
               className="bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-[#4B5CA8] transition"
-            >
+              >
               <Link to={item.to}>{item.label}</Link>
             </button>
           ))}

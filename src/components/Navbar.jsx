@@ -29,7 +29,8 @@ export default function Navbar() {
             key={i}
             to={item.to}
             className={({ isActive }) =>
-              `block p-3 rounded-lg transition ${isActive ? "bg-[#3B4B82] text-white font-semibold" : "hover:bg-[#4C4C6D]"
+              `block p-3 rounded-lg transition ${
+                isActive ? "bg-[#3B4B82] text-white font-semibold" : "hover:bg-[#4C4C6D]"
               }`
             }
             onClick={() => setIsOpen(false)}
@@ -40,7 +41,10 @@ export default function Navbar() {
       </nav>
       <button
         className="w-full bg-[#3B4B82] text-[#E0E0E0] font-medium py-2 rounded-md hover:bg-red-500 hover:text-black hover:font-bold active:translate-y-0.5 active:shadow-sm transition duration-150 ease-in-out hover:cursor-pointer"
-        onClick={() => { handleClearAllData() }}
+        onClick={() => {
+          handleClearAllData();
+          setIsOpen(false);
+        }}
       >
         Limpar todos os dados
       </button>
@@ -49,24 +53,25 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Mobile Nav - botão hamburguer */}
+      <div className="md:hidden p-4 bg-[#2D2D44] flex justify-between items-center">
+        <h2 className="text-xl font-bold text-[#7AA2F7]">Menu</h2>
+        <button onClick={() => setIsOpen(!isOpen)} className="space-y-1.5">
+          <div className="w-6 h-0.5 bg-white" />
+          <div className="w-6 h-0.5 bg-white" />
+          <div className="w-6 h-0.5 bg-white" />
+        </button>
+      </div>
 
       {/* Sidebar normal (desktop) */}
       <aside className="hidden md:flex flex-col w-1/4 h-screen bg-[#2D2D44] p-6">
         <NavContent />
       </aside>
 
-      {/* Mobile Nav - botão hamburguer */}
-      <div className="absolute right-0 mr-5 mt-2 text-xl sm:hidden">
-        <button onClick={() => setIsOpen(!isOpen)} className="rotate-90">
-          |||
-        </button>
-      </div>
-
-
       {/* Menu mobile (drawer simples) */}
       {isOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-[#2D2D44] px-6 py-3 overflow-y-auto">
-          <div className="flex justify-end">
+        <div className="md:hidden fixed inset-0 z-50 bg-[#2D2D44] p-6 overflow-y-auto">
+          <div className="flex justify-end mb-4">
             <button onClick={() => setIsOpen(false)} className="text-white text-xl">&times;</button>
           </div>
           <NavContent />

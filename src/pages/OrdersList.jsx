@@ -9,7 +9,7 @@ export default function OrdersList() {
   const completedOrdersExist = orderList.some(order => order.status === true);
 
   return (
-    <div className="w-full bg-[#1E1E2F] rounded-lg p-6 shadow-sm mb-4 flex flex-col gap-1 overflow-y-scroll">
+    <div className="w-full h-screen bg-[#1E1E2F] rounded-lg mt-10 p-6 shadow-sm mb-4 flex flex-col gap-1 overflow-y-scroll sm:mt-0">
 
       {/* Checando se há algum pedido */}
       {orderList.length === 0 ?
