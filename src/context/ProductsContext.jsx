@@ -29,9 +29,9 @@ export default function ProductsProvider({ children }) {
 
    const handleAddNewProductButton = (name, value, amount) => {
 
-      if (!validationProduct(products, name, Number(value), Number(amount), setName, setValue, setAmount)) return;
-
       if (!inputValidation(setValidationErros, ['Nome', 'Valor', 'Quantidade'], name, value, amount)) return;
+      
+      if (!validationProduct(products, name, Number(value), Number(amount), setName, setValue, setAmount)) return;
 
       const id = Date.now();
       dispatch({ type: 'add', payload: { id: id, name, value, amount } });

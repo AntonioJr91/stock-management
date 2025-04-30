@@ -17,7 +17,8 @@ export default function Navbar() {
     const confirm = window.confirm("ATENÇÃO! Deseja limpar todos os dados da aplicação?");
     if (!confirm) return;
     clearLocalStorage();
-    window.location.reload();
+    window.location.reload(true);
+    window.location = ('/')
   };
 
   const NavContent = () => (
