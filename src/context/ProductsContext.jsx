@@ -29,7 +29,7 @@ export default function ProductsProvider({ children }) {
 
    const handleAddNewProductButton = (name, value, amount) => {
 
-      if (!validationProduct(products, name, setName, setValue, setAmount)) return;
+      if (!validationProduct(products, name, Number(value), Number(amount), setName, setValue, setAmount)) return;
 
       if (!inputValidation(setValidationErros, ['Nome', 'Valor', 'Quantidade'], name, value, amount)) return;
 

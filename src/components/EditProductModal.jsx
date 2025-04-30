@@ -4,8 +4,8 @@ import { pressKeyDown } from "../helpers/pressKeyDown";
 export default function EditProductModal({ closeModal, products, dispatch, productId }) {
 
   const [name, setName] = useState('');
-  const [value, setValue] = useState('');
-  const [amount, setAmount] = useState('');
+  const [value, setValue] = useState(0);
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     const product = products.find(product => product.id === productId);
@@ -31,7 +31,7 @@ export default function EditProductModal({ closeModal, products, dispatch, produ
     if (!product) {
       alert('Produto não encontrado!');
     }
-
+    
     dispatch({ type: 'update', payload: { id: productId, name, value, amount } });
     closeModal();
   }
@@ -65,7 +65,7 @@ export default function EditProductModal({ closeModal, products, dispatch, produ
             <input
               type="number"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(parseInt(e.target.value))}
               className="w-full px-3 py-2 rounded-md bg-[#1E1E2E] text-[#E0E0E0] border border-[#3A3A50] focus:outline-none focus:border-[#7AA2F7]"
             />
           </div>
@@ -76,7 +76,7 @@ export default function EditProductModal({ closeModal, products, dispatch, produ
               type="number"
               step="0.01"
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => setValue(parseFloat(e.target.value))}
               onKeyDown={(e) => pressKeyDown(e.code, handleSaveModalButton)}
               className="w-full px-3 py-2 rounded-md bg-[#1E1E2E] text-[#E0E0E0] border border-[#3A3A50] focus:outline-none focus:border-[#7AA2F7]"
             />

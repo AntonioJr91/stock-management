@@ -13,7 +13,6 @@ export const inputValidation = (setValidationErros, ...args) => {
       return acc;
    }, []);
 
-
    if (errors.length > 0) {
       setValidationErros(errors);
       return false;

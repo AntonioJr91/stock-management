@@ -29,6 +29,11 @@ export default function OrdersProvider({ children }) {
       try {
          if (!inputValidation(setValidationErros, ['Nome', 'Quantidade', 'Cliente'], productName, amount, clientName)) return;
 
+         if (parseFloat(amount) <= 0) {
+            alert('A quantidade do pedido precisa ser maior que zero.');
+            return false;
+         }
+
          const product = products.find(product => product.name === productName);
 
          if (product.amount === 0) {

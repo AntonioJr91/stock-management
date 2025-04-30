@@ -5,8 +5,6 @@ import { clearInputs } from "../helpers/clearInputs";
 
 export default function ProductsForm() {
 
-
-
   const
     {
       name,
